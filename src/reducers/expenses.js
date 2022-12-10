@@ -9,12 +9,12 @@ export default (state = expensesReducerDefaultState, action) => {
     case "EDIT_EXPENSE":
       return state.map((expense) => {
         if (expense.id === action.id) {
-          return {
+          expense = {
             ...expense,
             ...action.updates,
-          };
-        } else {
+          }
         }
+        return expense
       });
     default:
       return state;
