@@ -1,4 +1,5 @@
 const path = require("path");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = (env) => {
   return {
@@ -17,11 +18,26 @@ module.exports = (env) => {
         },
         {
           test: /\.s?css$/,
-          use: ["style-loader", "css-loader", "sass-loader"],
+          use: [
+            MiniCssExtractPlugin.loader,
+            {
+              loader: "css-loader",
+              options: {
+                sourceMap: true,
+              },
+            },
+            {
+              loader: "sass-loader",
+              options: {
+                sourceMap: true,
+              },
+            },
+          ],
         },
       ],
     },
-    devtool: env.production ? "source-map" : "eval",
+    plugins: [new MiniCssExtractPlugin()],
+    devtool: env.production ? "source-map" : "inline-source-map",
     devServer: {
       static: {
         directory: path.join(__dirname, "public"),
@@ -29,4 +45,4 @@ module.exports = (env) => {
       historyApiFallback: true,
     },
   };
-}
+};
