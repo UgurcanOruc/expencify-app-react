@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should render ExpenseListFilters correctly 1`] = `undefined`;
+
+exports[`should render ExpenseListFilters correctly 2`] = `undefined`;
+
+exports[`should render ExpenseListFilters with alternative data correctly 1`] = `undefined`;
