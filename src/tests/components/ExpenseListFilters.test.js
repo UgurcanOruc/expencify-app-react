@@ -2,7 +2,7 @@ import React from "react";
 import { shallow } from "enzyme";
 import moment from 'moment';
 import { ExpenseListFilters } from "../../components/ExpenseListFilters";
-import { filters, altFiters } from "../fixtures/filters";
+import { filters, altFilters } from "../fixtures/filters";
 
 let setTextFilter, sortByDate, sortByAmount, setStartDate, setEndDate, wrapper;
 
@@ -30,7 +30,7 @@ test("should render ExpenseListFilters correctly", () => {
 
 test("should render ExpenseListFilters with alternative data correctly", () => {
   wrapper.setProps({
-    filters: altFiters,
+    filters: altFilters,
   });
   expect(wrapper).toMatchSnapshot();
 });
@@ -48,7 +48,7 @@ test("should handle text change", () => {
 test("should sort by date", () => {
     const value = 'date'
     wrapper.setProps({
-        filters: altFilters
+      filters: altFilters,
     });
     wrapper.find('select').simulate('change', {
         target: { value }
@@ -64,7 +64,7 @@ test("should sort by amount", () => {
   wrapper.find("select").simulate("change", {
     target: { value },
   });
-  expect(sortByAmount).toHaveBeenCalled();
+  expect(sortByAmount).toHaveBeenLastCalledWith();
 });
 
 test("shold handle date changes", () => {
