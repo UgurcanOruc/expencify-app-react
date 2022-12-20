@@ -7,12 +7,15 @@ exports[`should render expense 1`] = `
       replace={false}
       to="/edit/1"
     >
-      Gum
-       : 
-      195
-      , 
-      0
+      <h3>
+        Gum
+      </h3>
     </Link>
+    <p>
+      1.95
+       TL - 
+      January 1st, 1970
+    </p>
   </p>
 </div>
 `;
