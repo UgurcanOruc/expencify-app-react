@@ -15,5 +15,11 @@ const firebaseApp = initializeApp(firebaseConfig);
 
 export const db = getFirestore(firebaseApp);
 
-const testCollectionRef = collection(db, 'test')
-addDoc(testCollectionRef, { name: "Ugurcan Oruc" });
+const expensesCollectionRef = collection(db, 'expenses')
+// addDoc(expensesCollectionRef, { name: "Ugurcan Oruc" })
+//   .then(() => {
+//     console.log('Data is saved')
+//   })
+//   .catch((e) => {
+//     console.log(e);
+//   });
