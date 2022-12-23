@@ -17,7 +17,8 @@ export const startAddExpense = (expenseData = {}) => {
     } = expenseData;
     const expense = { description, note, amount, createdAt };
     const expensesRef = collection(Db, 'expenses');
-    addDoc(expensesRef, expense)
+    
+    return addDoc(expensesRef, expense)
       .then(docRef => {
         dispatch(
           addExpense({
