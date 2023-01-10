@@ -1,6 +1,6 @@
 import uuid from 'uuid';
 import { Db } from '../firebase/firebase';
-import { collection, addDoc, Timestamp } from "firebase/firestore";
+import { collection, addDoc, getDocs } from "firebase/firestore";
 
 export const addExpense = (expense) => ({
   type: "ADD_EXPENSE",
@@ -43,3 +43,30 @@ export const editExpense = (id, updates) => ({
   id,
   updates,
 });
+
+export const setExpenses = (expenses) => ({
+  type: 'SET_EXPENSES',
+  expenses
+});
+
+export const startSetExpenses = () => {
+  return (dispatch) => {
+    const expensesRef = collection(Db, "expenses");
+
+    return getDocs(expensesRef)
+      .then((snapshot) => {
+        const expenses = [];
+        snapshot.forEach(doc => {
+          expenses.push({
+            id: doc.id,
+            ...doc.data()
+          });
+        });
+
+        dispatch(setExpenses(expenses));
+      })
+      .catch((error) => {
+        console.log("Error while adding expense.", error);
+      });
+  };
+};
