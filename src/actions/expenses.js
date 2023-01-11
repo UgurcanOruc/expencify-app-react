@@ -1,10 +1,43 @@
-import uuid from 'uuid';
-import { Db } from '../firebase/firebase';
-import { collection, addDoc, getDocs } from "firebase/firestore";
+import { Db } from "../firebase/firebase";
+import {
+  collection,
+  doc,
+  getDocs,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+} from "firebase/firestore";
+
+export const setExpenses = (expenses) => ({
+  type: "SET_EXPENSES",
+  expenses,
+});
+
+export const startSetExpenses = () => {
+  return (dispatch) => {
+    const expensesRef = collection(Db, "expenses");
+
+    return getDocs(expensesRef)
+      .then((snapshot) => {
+        const expenses = [];
+        snapshot.forEach((doc) => {
+          expenses.push({
+            id: doc.id,
+            ...doc.data(),
+          });
+        });
+
+        dispatch(setExpenses(expenses));
+      })
+      .catch((error) => {
+        console.log("Error while adding expense.", error);
+      });
+  };
+};
 
 export const addExpense = (expense) => ({
   type: "ADD_EXPENSE",
-  expense
+  expense,
 });
 
 export const startAddExpense = (expenseData = {}) => {
@@ -16,10 +49,10 @@ export const startAddExpense = (expenseData = {}) => {
       createdAt = 0,
     } = expenseData;
     const expense = { description, note, amount, createdAt };
-    const expensesRef = collection(Db, 'expenses');
-    
+    const expensesRef = collection(Db, "expenses");
+
     return addDoc(expensesRef, expense)
-      .then(docRef => {
+      .then((docRef) => {
         dispatch(
           addExpense({
             id: docRef.id,
@@ -30,13 +63,8 @@ export const startAddExpense = (expenseData = {}) => {
       .catch((error) => {
         console.log("Error while adding expense.", error);
       });
-  }
-}
-
-export const removeExpense = ({ id }) => ({
-  type: "REMOVE_EXPENSE",
-  id,
-});
+  };
+};
 
 export const editExpense = (id, updates) => ({
   type: "EDIT_EXPENSE",
@@ -44,29 +72,34 @@ export const editExpense = (id, updates) => ({
   updates,
 });
 
-export const setExpenses = (expenses) => ({
-  type: 'SET_EXPENSES',
-  expenses
-});
-
-export const startSetExpenses = () => {
+export const startEditExpense = (id, updates) => {
   return (dispatch) => {
-    const expensesRef = collection(Db, "expenses");
-
-    return getDocs(expensesRef)
-      .then((snapshot) => {
-        const expenses = [];
-        snapshot.forEach(doc => {
-          expenses.push({
-            id: doc.id,
-            ...doc.data()
-          });
-        });
-
-        dispatch(setExpenses(expenses));
+    const docRef = doc(Db, "expenses", id);
+    return updateDoc(docRef, updates)
+      .then((result) => {
+        console.log(result);
+        dispatch(editExpense(id, updates));
       })
       .catch((error) => {
-        console.log("Error while adding expense.", error);
+        console.log("Error while updating expense id= " + id, error);
+      });
+  };
+};
+
+export const removeExpense = ({ id }) => ({
+  type: "REMOVE_EXPENSE",
+  id,
+});
+
+export const startRemoveExpense = ({ id } = {}) => {
+  return (dispatch) => {
+    const docRef = doc(Db, "expenses", id);
+    return deleteDoc(docRef)
+      .then((result) => {
+        dispatch(removeExpense(id));
+      })
+      .catch((error) => {
+        console.log("Error while removing expense.", error);
       });
   };
 };
