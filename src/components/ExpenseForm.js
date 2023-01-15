@@ -2,6 +2,7 @@ import React from "react";
 import moment from "moment";
 import { SingleDatePicker } from "react-dates";
 
+
 export default class ExpenseForm extends React.Component {
   constructor(props) {
     super(props);
@@ -59,6 +60,10 @@ export default class ExpenseForm extends React.Component {
     }
   };
 
+  onRemove = () => {
+    this.props.onRemove();
+  }
+
   render() {
     return (
       <form className="form" onSubmit={this.onSubmit}>
@@ -92,7 +97,18 @@ export default class ExpenseForm extends React.Component {
           value={this.state.note}
           onChange={this.onNoteChange}
         ></textarea>
-        <div>
+        <div className="form-buttons">
+          {this.props.expense ? (
+            <button
+              type="button"
+              className="button button-secondary"
+              onClick={this.onRemove}
+            >
+              Remove
+            </button>
+          ) : (
+            ""
+          )}
           <button type="submit" className="button">
             {this.props.expense ? "Save Expense" : "Add Expense"}
           </button>

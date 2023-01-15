@@ -33,7 +33,6 @@ ReactDOM.render(<Loader />, document.getElementById("app"));
 const auth = getAuth();
 onAuthStateChanged(auth, (user) => {
   if (user) {
-    console.log("log in id: " + user.uid);
     store.dispatch(login(user.uid));
     store.dispatch(startSetExpenses()).then(() => {
       renderApp();
@@ -42,10 +41,8 @@ onAuthStateChanged(auth, (user) => {
       }
     });
   } else {
-    // User is signed out
     store.dispatch(logout());
     renderApp();
-    console.log("log out");
     history.push("/");
   }
 });
